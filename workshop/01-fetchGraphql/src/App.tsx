@@ -29,7 +29,6 @@ type PageInfo = {
 
 // Fetch a GraphQL query passing arguments
 async function fetchGraphQL(query: string, variables: object = {}) {
-  console.log(variables);
   const response = await fetch(config.GRAPHQL_URL!!, {
     method: 'POST',
     headers: {
@@ -66,8 +65,6 @@ const App = () => {
             variables = { first: null, after: null, before: pageInfo.startCursor, last: 3 };
           }
         }
-
-        console.log(variables);
 
         const response = await fetchGraphQL(
           `
