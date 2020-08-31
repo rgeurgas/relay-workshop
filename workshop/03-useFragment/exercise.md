@@ -9,4 +9,4 @@ Move Post type selections inside Post Component and useFragment to consume them
 
 ## Extras
 
-- [ ] render post author name
+- [x] render post author name
