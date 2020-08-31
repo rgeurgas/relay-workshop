@@ -12,14 +12,6 @@ type Post = {
   content: string;
 };
 
-// Arguments of the GraphQL query
-type Variables = {
-  first: number | null;
-  after: string | null;
-  before: string | null;
-  last: number | null;
-};
-
 type PageInfo = {
   hasNextPage: boolean;
   hasPreviousPage: boolean;
@@ -44,28 +36,29 @@ async function fetchGraphQL(query: string, variables: object = {}) {
   return await response.json();
 }
 
+function getVariables(pageInfo: PageInfo | undefined, next: boolean) {
+  if (pageInfo !== undefined) {
+    if (next) {
+      return { first: 3, after: pageInfo.endCursor, before: null, last: null };
+    } else {
+      return { first: null, after: null, before: pageInfo.startCursor, last: 3 };
+    }
+  }
+
+  return { first: 3, after: null, before: null, last: null };
+}
+
 const App = () => {
   const [posts, setPosts] = useState<Array<Post> | null>(null);
   const [error, setError] = useState<Error | null>(null);
   // State used to fetch next or previous page
   const [pageInfo, setPageInfo] = useState<PageInfo | null>(null);
-  // Used for retry on error
-  const [next, setNext] = useState<boolean>(true);
+  // Used to know if it needs to fetch the next or previous elements on Error
+  const [fetchRetryNext, setFetchRetryNext] = useState<boolean>(true);
 
   const fetchPosts = useCallback(
     async (pageInfo?: PageInfo, next = true) => {
       try {
-        // If no pageInfo passed it is a new page, so fetch only the first 3 elements
-        let variables: Variables = { first: 3, after: null, before: null, last: null };
-        if (pageInfo !== undefined) {
-          // Fetch next 3 elements or 3 previous elements based on next passed
-          if (next) {
-            variables = { first: 3, after: pageInfo.endCursor, before: null, last: null };
-          } else {
-            variables = { first: null, after: null, before: pageInfo.startCursor, last: 3 };
-          }
-        }
-
         const response = await fetchGraphQL(
           `
         query PostsQuery($first: Int, $after: String, $before: String, $last: Int) {
@@ -84,11 +77,10 @@ const App = () => {
             }
           }          
         }`,
-          variables,
+          getVariables(pageInfo, next),
         );
 
-        // throw new Error("testando erros")
-        setNext(next);
+        setFetchRetryNext(next);
         setPageInfo(response.data.posts.pageInfo as PageInfo);
         setPosts(
           response.data.posts.edges.map((p: { node: Post }) => {
@@ -100,14 +92,13 @@ const App = () => {
         setError(e);
       }
     },
-    [setPageInfo, setNext, setPosts, setError],
+    [setPageInfo, setFetchRetryNext, setPosts, setError],
   );
 
   useEffect(() => {
     fetchPosts();
   }, [fetchPosts]);
 
-  // Check for errors
   if (error) {
     return (
       <Content>
@@ -116,7 +107,7 @@ const App = () => {
           mt='10px'
           onClick={() => {
             if (pageInfo) {
-              fetchPosts(pageInfo, next);
+              fetchPosts(pageInfo, fetchRetryNext);
             } else {
               fetchPosts();
             }
@@ -128,7 +119,6 @@ const App = () => {
     );
   }
 
-  // If pageInfo or posts is null page is loading
   if (!pageInfo || !posts) {
     return (
       <Content>
