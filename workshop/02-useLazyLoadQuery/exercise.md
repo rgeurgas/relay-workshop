@@ -21,5 +21,5 @@ query {
 
 ## Extras
 
-- [ ] handle error
-- [ ] use variables
+- [x] handle error
+- [x] use variables
