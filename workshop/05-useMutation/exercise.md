@@ -9,8 +9,8 @@ Learn how to use useMutation to modify GraphQL data
 
 ## Extras
 
-- [ ] implement PostUnLike mutation
-- [ ] add optimistic response to provide a fast feedback to user
+- [x] implement PostUnLike mutation
+- [x] add optimistic response to provide a fast feedback to user
 
 ## Code Helpers
 
