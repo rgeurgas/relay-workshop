@@ -9,7 +9,7 @@ Learn how to use usePaginationFragment to paginate a list of posts
 
 ## Extras
 
-- [ ] use InfiniteScroll (react-infinite-scroller) component to create an infinite scroll pagination
+- [x] use InfiniteScroll (react-infinite-scroller) component to create an infinite scroll pagination
 
 ## Code Helpers
 
