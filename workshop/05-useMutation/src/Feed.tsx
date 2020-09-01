@@ -8,12 +8,13 @@ import { usePaginationFragment } from 'react-relay/lib/hooks';
 
 import Post from './Post';
 
-import { Feed_query, Feed_query$key } from './__generated__/Feed_query.graphql';
+import { Feed_query$key } from './__generated__/Feed_query.graphql';
 import { FeedPaginationQuery } from './__generated__/FeedPaginationQuery.graphql';
 
 type Props = {
-  query: Feed_query;
+  query: Feed_query$key;
 };
+
 const Feed = (props: Props) => {
   const { data, loadNext, isLoadingNext } = usePaginationFragment<FeedPaginationQuery, Feed_query$key>(
     graphql`

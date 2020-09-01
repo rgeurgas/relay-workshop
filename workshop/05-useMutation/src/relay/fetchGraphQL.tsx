@@ -3,19 +3,14 @@ import { Variables } from 'relay-runtime/lib/util/RelayRuntimeTypes';
 
 import config from '../config';
 
-// read from localstorage or cookie
 const getToken = () => {
-  /**
-   * TODO
-   * use your user token
-   */
-  return 'JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVlOWMyY2I0NTI5NjJiNmNjZTA3OGNmMCIsImlhdCI6MTU4NzI5MzM2NH0.ieeCANyYeNMwbSF2MH-lYFsLNO_ZWqWsP8H3M-KF7mA';
+  return 'JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVmMGQxN2JmOTY4Yzk4Y2E4MGNjMzUzYSIsImlhdCI6MTU5ODk3ODg4N30.l4aUXQjnp8-goajc7tMNojKt6fW1G8ivv1E_-MfRUBY';
 };
 
 export const fetchGraphQL = async (request: RequestParameters, variables: Variables) => {
   const authorization = getToken();
 
-  const response = await fetch(config.GRAPHQL_URL, {
+  const response = await fetch(config.GRAPHQL_URL!!, {
     method: 'POST',
     headers: {
       Accept: 'application/json',
