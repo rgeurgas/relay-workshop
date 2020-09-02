@@ -26,7 +26,7 @@ export const PostCreate = graphql`
 `;
 
 export const updater: SelectorStoreUpdater = store => {
-  const newEdge = store.getRootField('PostCreate').getLinkedRecord('postEdge');
+  const newEdge = store.getRootField('PostCreate')!!.getLinkedRecord('postEdge')!!;
 
   connectionUpdater({
     store,

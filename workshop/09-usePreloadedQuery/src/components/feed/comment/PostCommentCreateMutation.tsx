@@ -29,7 +29,7 @@ export const PostCommentCreate = graphql`
 `;
 
 export const updater = (parentId: string): SelectorStoreUpdater => (store: RecordSourceSelectorProxy) => {
-  const newEdge = store.getRootField('PostCommentCreate').getLinkedRecord('commentEdge');
+  const newEdge = store.getRootField('PostCommentCreate')!!.getLinkedRecord('commentEdge')!!;
 
   connectionUpdater({
     store,
@@ -49,7 +49,7 @@ export const optimisticUpdater = (input: PostCommentCreateInput, me: PostComment
 
   const node = store.create(id, 'Comment');
 
-  const meProxy = store.get(me.id);
+  const meProxy = store.get(me.id)!!;
 
   node.setValue(id, 'id');
   node.setValue(input.body, 'body');
@@ -58,7 +58,7 @@ export const optimisticUpdater = (input: PostCommentCreateInput, me: PostComment
   const newEdge = store.create('client:newEdge:' + tempID++, 'CommentEdge');
   newEdge.setLinkedRecord(node, 'node');
 
-  const parentProxy = store.get(input.post);
-  const conn = ConnectionHandler.getConnection(parentProxy, 'PostComments_comments');
+  const parentProxy = store.get(input.post)!!;
+  const conn = ConnectionHandler.getConnection(parentProxy, 'PostComments_comments')!!;
   ConnectionHandler.insertEdgeBefore(conn, newEdge);
 };

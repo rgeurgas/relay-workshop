@@ -67,7 +67,7 @@ const Post = (props: Props) => {
     <Card mt='10px' mb='10px' flexDirection='column'>
       <Wrapper {...wrapperProps}>
         <CardContent>
-          <PostHeader user={author} />
+          <PostHeader user={author!!} />
           <Text mt='10px'>{post.content}</Text>
         </CardContent>
       </Wrapper>
