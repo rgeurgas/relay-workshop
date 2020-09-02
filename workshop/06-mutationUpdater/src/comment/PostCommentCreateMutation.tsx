@@ -27,13 +27,13 @@ export const PostCommentCreate = graphql`
 `;
 
 export const updater = (parentId: string): SelectorStoreUpdater => (store: RecordSourceSelectorProxy) => {
-  const payload = store.getRootField('PostCommentCreate')!!
-  const comment = payload.getLinkedRecord('commentEdge')!!
+  const payload = store.getRootField('PostCommentCreate')!!;
+  const comment = payload.getLinkedRecord('commentEdge')!!;
 
   const parentProxy = store.get(parentId)!!;
   const conn = ConnectionHandler.getConnection(parentProxy, 'PostComments_comments')!!;
-  const commentsCount = conn.getValue('count')!! as number
-  conn.setValue(commentsCount + 1, 'count')
+  const commentsCount = conn.getValue('count')!! as number;
+  conn.setValue(commentsCount + 1, 'count');
   ConnectionHandler.insertEdgeBefore(conn, comment);
 };
 
@@ -57,7 +57,7 @@ export const optimisticUpdater = (input: PostCommentCreateInput, me: PostComment
 
   const parentProxy = store.get(input.post)!!;
   const conn = ConnectionHandler.getConnection(parentProxy, 'PostComments_comments')!!;
-  const commentsCount = conn.getValue('count')!! as number
-  conn.setValue(commentsCount + 1, 'count')
+  const commentsCount = conn.getValue('count')!! as number;
+  conn.setValue(commentsCount + 1, 'count');
   ConnectionHandler.insertEdgeBefore(conn, newEdge);
 };

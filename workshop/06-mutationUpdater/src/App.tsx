@@ -15,7 +15,7 @@ const App = () => {
         ...Feed_query
       }
     `,
-    {}
+    {},
   );
 
   return (

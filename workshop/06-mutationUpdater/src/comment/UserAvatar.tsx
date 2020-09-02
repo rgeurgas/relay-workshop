@@ -13,10 +13,10 @@ import { UserAvatar_user$key } from './__generated__/UserAvatar_user.graphql';
 export const getInitials = (name: string) => {
   return name
     ? name
-      .split(' ')
-      .slice(0, 2)
-      .map(namePart => namePart.charAt(0))
-      .join('')
+        .split(' ')
+        .slice(0, 2)
+        .map(namePart => namePart.charAt(0))
+        .join('')
     : 'AN';
 };
 
