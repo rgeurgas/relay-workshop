@@ -9,4 +9,4 @@ Learn how to use preloadQuery + usePreloadedQuery to fetch data at the same time
 
 ## Extras
 
-- [ ] add preloadQuery on path: '/post/:id'
+- [x] add preloadQuery on path: '/post/:id'
