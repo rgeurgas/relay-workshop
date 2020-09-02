@@ -8,7 +8,7 @@ Learn how to use useSubscription to listen for changes in your GraphQL server
 
 ## Extras
 
-- [ ] add updater to update store
+- [x] add updater to update store
 
 ## Code Helpers
 

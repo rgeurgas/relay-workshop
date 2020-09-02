@@ -16,7 +16,7 @@ export const setupSubscription: SubscribeFunction = (request, variables) => {
     connectionParams['authorization'] = authorization;
   }
 
-  const subscriptionClient = new SubscriptionClient(config.SUBSCRIPTION_URL, {
+  const subscriptionClient = new SubscriptionClient(config.SUBSCRIPTION_URL!!, {
     reconnect: true,
     connectionParams,
   });

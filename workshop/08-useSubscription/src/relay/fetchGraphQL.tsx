@@ -8,7 +8,7 @@ import { getToken } from './getToken';
 export const fetchGraphQL = async (request: RequestParameters, variables: Variables) => {
   const authorization = getToken();
 
-  const response = await fetch(config.GRAPHQL_URL, {
+  const response = await fetch(config.GRAPHQL_URL!!, {
     method: 'POST',
     headers: {
       Accept: 'application/json',
