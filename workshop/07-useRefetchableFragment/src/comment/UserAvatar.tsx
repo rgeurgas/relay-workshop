@@ -37,7 +37,7 @@ const UserAvatar = (props: Props) => {
     props.user,
   );
 
-  const initials = getInitials(user.name);
+  const initials = getInitials(user.name!!);
 
   return (
     <Flex alignItems='center'>
