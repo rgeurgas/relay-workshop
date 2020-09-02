@@ -8,8 +8,8 @@ Learn how to use updater to update your Relay Store without using a refetch quer
 
 ## Extras
 
-- [ ] use optimistic updater to provide a fast feedback to user
-- [ ] show comments count and update comments count using updater
+- [x] use optimistic updater to provide a fast feedback to user
+- [x] show comments count and update comments count using updater
 
 ## Code Helpers
 - Get a record from Relay store using a global id

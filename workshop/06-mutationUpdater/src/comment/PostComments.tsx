@@ -54,6 +54,7 @@ const PostComments = (props: Props) => {
 
   return (
     <Flex flex={1} p='16px' flexDirection='column'>
+      <Text>comments: {post.comments.count}</Text>
       {post.comments.edges.map(({ node }) => {
         return (
           <Flex mt='10px' key={node.id}>

@@ -78,7 +78,7 @@ const PostCommentComposer = (props: Props) => {
     <>
       <Divider />
       <Flex flex={1} p='16px'>
-        <UserAvatar showName={false} user={post.author} />
+        <UserAvatar showName={false} user={post.author!!} />
         <TextFieldMaterial
           ml='10px'
           flexGrow={1}
