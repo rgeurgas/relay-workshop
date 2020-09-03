@@ -1,5 +1,5 @@
-import React from 'react';
-import { graphql, useFragment } from 'react-relay/hooks';
+import React, { useTransition } from 'react';
+import { graphql, useRefetchableFragment } from 'react-relay/hooks';
 import { Flex, Text } from 'rebass';
 import Button from '@material-ui/core/Button';
 import CircularProgress from '@material-ui/core/CircularProgress';
@@ -9,27 +9,28 @@ import { theme } from '@workshop/ui';
 import UserAvatar from './UserAvatar';
 
 import { PostComments_post$key } from './__generated__/PostComments_post.graphql';
+import { PostCommentsRefetchQuery } from './__generated__/PostCommentsRefetchQuery.graphql';
 
 type Props = {
   post: PostComments_post$key;
 };
 const PostComments = (props: Props) => {
-  /**
-   * TODO
-   * use useTransition hook to "suspend" if refetch took too long
-   */
-  const isPending = false;
+  const [startTransitionOlder, isPendingOlder] = useTransition();
+  const [startTransitionNewer, isPendingNewer] = useTransition();
 
-  /**
-   * TODO
-   * use useRefetchableFragment to be able to fetch newer/older comments of this post
-   */
-  const post = useFragment<PostComments_post$key>(
+  const [post, refetch] = useRefetchableFragment<PostCommentsRefetchQuery, PostComments_post$key>(
     graphql`
       fragment PostComments_post on Post
-        @argumentDefinitions(first: { type: Int, defaultValue: 3 }, after: { type: String }) {
+        @argumentDefinitions(
+          first: { type: Int }
+          after: { type: String }
+          last: { type: Int }
+          before: { type: String }
+        )
+        @refetchable(queryName: "PostCommentsRefetchQuery") {
         id
-        comments(first: $first, after: $after) @connection(key: "PostComments_comments", filters: []) {
+        comments(first: $first, after: $after, last: $last, before: $before)
+          @connection(key: "PostComments_comments", filters: []) {
           endCursorOffset
           startCursorOffset
           count
@@ -57,24 +58,46 @@ const PostComments = (props: Props) => {
     props.post,
   );
 
-  const { comments } = post;
+  const { comments } = post!!;
   const { edges, pageInfo } = comments;
 
   if (edges.length === 0) {
     return null;
   }
 
-  /**
-   * TODO
-   * complete loadMore to use startTransition and refetch to fetch more comments
-   */
-  const loadMore = () => {};
+  const loadMoreOlder = () => {
+    startTransitionOlder(() => {
+      refetch(
+        {
+          id: post!!.id,
+          first: 3,
+          after: pageInfo.endCursor,
+        },
+        { fetchPolicy: 'store-and-network' },
+      );
+    });
+  };
 
-  const isDisabled = !pageInfo.hasNextPage;
+  const loadMoreNewer = () => {
+    console.log(post!!.id);
+    console.log(pageInfo.startCursor);
+    startTransitionNewer(() => {
+      refetch(
+        {
+          id: post!!.id,
+          last: 3,
+          before: pageInfo.startCursor,
+        },
+        { fetchPolicy: 'store-and-network' },
+      );
+    });
+  };
+
+  const isDisabledOlder = !pageInfo.hasNextPage;
 
   return (
     <Flex flex={1} p='16px' flexDirection='column'>
-      {post.comments.edges.map(({ node }) => {
+      {comments.edges.map(({ node }) => {
         return (
           <Flex mt='10px' key={node.id}>
             <UserAvatar showName={false} user={node.user} />
@@ -87,13 +110,16 @@ const PostComments = (props: Props) => {
           </Flex>
         );
       })}
-      {isPending && (
+      {(isPendingOlder || isPendingNewer) && (
         <Flex mt='10px' justifyContent='center'>
           <CircularProgress />
         </Flex>
       )}
       <Flex flex={1} justifyContent='flex-end' mt='10px'>
-        <Button variant='contained' color='primary' onClick={loadMore} disabled={isDisabled}>
+        <Button variant='contained' color='primary' onClick={loadMoreNewer}>
+          Show newer
+        </Button>
+        <Button variant='contained' color='primary' onClick={loadMoreOlder} disabled={isDisabledOlder}>
           Show older
         </Button>
       </Flex>
