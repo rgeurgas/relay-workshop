@@ -32,7 +32,7 @@ it('should render post like button', async () => {
 
   const customMockResolvers = {
     Post: () => ({
-      content: 'Welcome to React Europe'
+      content: 'Welcome to React Europe',
     }),
   };
 
@@ -40,9 +40,9 @@ it('should render post like button', async () => {
    * TODO
    * queue a pending operation, this would be a preloadQuery call
    */
-  const environment = createMockEnvironment()
-  environment.mock.queueOperationResolver(operation => MockPayloadGenerator.g)
-  Environment.queuePendingOperation
+  const environment = createMockEnvironment();
+  environment.mock.queueOperationResolver(operation => MockPayloadGenerator.g);
+  Environment.queuePendingOperation;
 
   /**
    * TODO
