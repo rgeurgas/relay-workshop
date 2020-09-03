@@ -10,7 +10,7 @@ import { Post_me, Post_me$key } from './__generated__/Post_me.graphql';
 import PostComments from './comment/PostComments';
 
 type Props = {
-  post: Post_post;
+  post: Post_post$key;
   me: Post_me;
 };
 const Post = (props: Props) => {

@@ -1,6 +1,4 @@
-// eslint-disable-next-line
 import React, { useMemo } from 'react';
-// eslint-disable-next-line
 import Button from '@material-ui/core/Button';
 
 import { useSnackbar } from 'notistack';
@@ -12,14 +10,11 @@ import { GraphQLSubscriptionConfig } from 'relay-runtime';
 import { AppQueryResponse } from '../__generated__/AppQuery.graphql';
 
 import { PostNew, updater } from './PostNewSubscription';
-import { PostNewSubscription, PostNewSubscriptionResponse } from './__generated__/PostNewSubscription.graphql';
+import { PostNewSubscription } from './__generated__/PostNewSubscription.graphql';
 
-// TODO - use @inline for me
 type Me = AppQueryResponse['me'];
 
-// eslint-disable-next-line
 export const useNewPostSubscription = (me: Me) => {
-  // eslint-disable-next-line
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
 
   const postNewConfig = useMemo<GraphQLSubscriptionConfig<PostNewSubscription>>(
@@ -29,19 +24,30 @@ export const useNewPostSubscription = (me: Me) => {
         input: {},
       },
       onCompleted: (...args) => {
-        // eslint-disable-next-line
         console.log('onCompleted: ', args);
       },
       onError: (...args) => {
-        // eslint-disable-next-line
         console.log('onError: ', args);
       },
-      // eslint-disable-next-line
-      onNext: ({ PostNew }: PostNewSubscriptionResponse) => {
-        /**
-         * TODO
-         * show a snackbar info message with new post data
-         */
+      onNext: response => {
+        const author = response!!.response!!.PostNew!!.post!!.author!!;
+
+        if (author.id !== me!!.id) {
+          const action = (key: string) => {
+            <Button
+              onClick={() => {
+                closeSnackbar(key);
+              }}
+            >
+              Close
+            </Button>;
+          };
+
+          enqueueSnackbar(`New Post from ${author.name}`, {
+            variant: 'success',
+            action,
+          });
+        }
       },
       updater,
     }),

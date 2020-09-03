@@ -19,6 +19,7 @@ const App = () => {
         }
       }
     `,
+    {},
   );
 
   const { me } = query;
