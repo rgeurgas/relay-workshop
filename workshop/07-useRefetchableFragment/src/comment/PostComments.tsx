@@ -71,17 +71,19 @@ const PostComments = (props: Props) => {
         id: post!!.id,
         first: 3,
         after: pageInfo.endCursor,
-      });
+      }, { fetchPolicy: 'store-and-network' });
     });
   };
 
   const loadMoreNewer = () => {
+    console.log(post!!.id)
+    console.log(pageInfo.startCursor)
     startTransitionNewer(() => {
       refetch({
         id: post!!.id,
         last: 3,
         before: pageInfo.startCursor,
-      });
+      }, { fetchPolicy: 'store-and-network' });
     });
   };
 
