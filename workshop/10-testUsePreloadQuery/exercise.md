@@ -13,7 +13,7 @@ Learn how to test components using usePreloadedQuery with @testing-library
 
 ## Extras
 
-- [ ] add another test (it), testing a post that was not found
+- [x] add another test (it), testing a post that was not found
 
 ## Code Helpers
 

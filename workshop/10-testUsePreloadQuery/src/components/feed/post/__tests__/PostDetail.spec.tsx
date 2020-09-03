@@ -47,11 +47,17 @@ it('should render post like button', async () => {
     Component: PostDetail,
   });
 
+
   const prepared = {
-    postDetailQuery: preloadQuery(Environment, PostDetailQuery, variables, { fetchPolicy: 'store-or-network' }),
+    postDetailQuery: preloadQuery(
+      Environment,
+      PostDetailQuery,
+      variables,
+      { fetchPolicy: 'store-or-network' }
+    ),
   };
 
-  const { debug, getByText } = render(<Root prepared={prepared} />);
+  const { getByText } = render(<Root prepared={prepared} />);
 
   expect(getByText('Welcome to React Europe')).toBeTruthy();
 });
@@ -91,11 +97,17 @@ it('should not find post', async () => {
     Component: PostDetail,
   });
 
+
   const prepared = {
-    postDetailQuery: preloadQuery(Environment, PostDetailQuery, variables, { fetchPolicy: 'store-or-network' }),
+    postDetailQuery: preloadQuery(
+      Environment,
+      PostDetailQuery,
+      variables,
+      { fetchPolicy: 'store-or-network' }
+    ),
   };
 
-  const { debug, queryByText } = render(<Root prepared={prepared} />);
+  const { queryByText } = render(<Root prepared={prepared} />);
 
   expect(queryByText('Not valid post')).toBeNull();
 });
