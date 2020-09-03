@@ -35,7 +35,7 @@ const PostHeader = (props: Props) => {
 
   return (
     <Flex alignItems='center'>
-      <UserAvatar user={user} />
+      <UserAvatar showName={true} user={user} />
       <Text ml='5px'>posted in your Workshop</Text>
     </Flex>
   );

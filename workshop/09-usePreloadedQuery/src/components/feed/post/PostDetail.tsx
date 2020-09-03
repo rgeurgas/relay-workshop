@@ -13,7 +13,7 @@ import { PostDetailQuery } from './__generated__/PostDetailQuery.graphql';
 
 type Props = {
   prepared: {
-    postDetailQuery: PostDetailQuery;
+    postDetailQuery: any;
   };
 };
 const PostDetail = ({ prepared }: Props) => {
@@ -46,7 +46,7 @@ const PostDetail = ({ prepared }: Props) => {
   return (
     <Content>
       <BackButton />
-      <Post post={data.post} me={me} isDetail={true} />
+      <Post post={data.post!!} me={me!!} isDetail={true} />
     </Content>
   );
 };
