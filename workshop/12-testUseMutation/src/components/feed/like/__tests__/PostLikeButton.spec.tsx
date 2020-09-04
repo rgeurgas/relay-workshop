@@ -2,9 +2,11 @@ import { render, fireEvent, wait } from '@testing-library/react';
 import '@testing-library/jest-dom/extend-expect';
 import React from 'react';
 import { MockPayloadGenerator } from 'relay-test-utils';
-import { act } from "react-dom/test-utils";
+import { act } from 'react-dom/test-utils';
 
 import { usePreloadedQuery, graphql, preloadQuery } from 'react-relay/hooks';
+
+import { getMutationOperationVariables } from '@workshop/test';
 
 import { Environment } from '../../../../relay';
 import PostLikeButton from '../PostLikeButton';
@@ -13,7 +15,6 @@ import { withProviders } from '../../../../../test/withProviders';
 
 import { PostLikeButtonSpecQuery } from './__generated__/PostLikeButtonSpecQuery.graphql';
 
-import { getMutationOperationVariables } from '@workshop/test';
 
 export const getRoot = ({ preloadedQuery }) => {
   const UseQueryWrapper = () => {
@@ -55,9 +56,7 @@ it('should render post like button and likes count', async () => {
 
   Environment.mock.queuePendingOperation(query, variables);
 
-  Environment.mock.queueOperationResolver(
-    operation => MockPayloadGenerator.generate(operation, customMockResolvers)
-  );
+  Environment.mock.queueOperationResolver(operation => MockPayloadGenerator.generate(operation, customMockResolvers));
 
   const preloadedQuery = preloadQuery(
     Environment,
@@ -75,30 +74,25 @@ it('should render post like button and likes count', async () => {
     preloadedQuery,
   });
 
-  const { getByText, getByTestId } = render(<Root />)
-
+  const { getByText, getByTestId } = render(<Root />);
 
   expect(getByText('10')).toBeTruthy();
 
-
-  const likeButton = getByTestId('likeButton')
+  const likeButton = getByTestId('likeButton');
 
   act(() => {
-    fireEvent.click(likeButton)
-  })
+    fireEvent.click(likeButton);
+  });
 
-  const mutationOp = Environment.mock.getMostRecentOperation()
+  const mutationOp = Environment.mock.getMostRecentOperation();
 
   expect(getMutationOperationVariables(mutationOp).input).toEqual({
-    post: postId
-  })
+    post: postId,
+  });
 
   act(() => {
-    Environment.mock.resolve(
-      mutationOp,
-      MockPayloadGenerator.generate(mutationOp)
-    );
-  })
+    Environment.mock.resolve(mutationOp, MockPayloadGenerator.generate(mutationOp));
+  });
 
   expect(getByText('11')).toBeTruthy();
 });
