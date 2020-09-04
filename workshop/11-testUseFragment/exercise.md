@@ -13,7 +13,7 @@ Learn how to test components using useFragment and @relay_test_operation with @t
 
 ## Extras
 
-- [ ] add another test (it), testing when likesCount is zero and should not have any number in the DOM
+- [x] add another test (it), testing when likesCount is zero and should not have any number in the DOM
 
 ## Code Helpers
 
