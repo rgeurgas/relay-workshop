@@ -1,8 +1,8 @@
-// eslint-disable-next-line
 import { render, fireEvent, wait } from '@testing-library/react';
 import '@testing-library/jest-dom/extend-expect';
 import React from 'react';
 import { MockPayloadGenerator } from 'relay-test-utils';
+import { act } from "react-dom/test-utils";
 
 import { usePreloadedQuery, graphql, preloadQuery } from 'react-relay/hooks';
 
@@ -13,7 +13,6 @@ import { withProviders } from '../../../../../test/withProviders';
 
 import { PostLikeButtonSpecQuery } from './__generated__/PostLikeButtonSpecQuery.graphql';
 
-// eslint-disable-next-line
 import { getMutationOperationVariables } from '@workshop/test';
 
 export const getRoot = ({ preloadedQuery }) => {
@@ -54,11 +53,11 @@ it('should render post like button and likes count', async () => {
     }),
   };
 
-  // queue pending operation
   Environment.mock.queuePendingOperation(query, variables);
 
-  // PostDetailQuery
-  Environment.mock.queueOperationResolver(operation => MockPayloadGenerator.generate(operation, customMockResolvers));
+  Environment.mock.queueOperationResolver(
+    operation => MockPayloadGenerator.generate(operation, customMockResolvers)
+  );
 
   const preloadedQuery = preloadQuery(
     Environment,
@@ -76,19 +75,30 @@ it('should render post like button and likes count', async () => {
     preloadedQuery,
   });
 
-  // eslint-disable-next-line
-  const { debug, getByText, getByTestId } = render(<Root />);
+  const { getByText, getByTestId } = render(<Root />)
 
-  // debug();
 
-  // it should render likes count
   expect(getByText('10')).toBeTruthy();
 
-  /**
-   * TODO
-   * get like button
-   * click like button
-   * wait mutation to be called
-   * assert mutation variables
-   */
+
+  const likeButton = getByTestId('likeButton')
+
+  act(() => {
+    fireEvent.click(likeButton)
+  })
+
+  const mutationOp = Environment.mock.getMostRecentOperation()
+
+  expect(getMutationOperationVariables(mutationOp).input).toEqual({
+    post: postId
+  })
+
+  act(() => {
+    Environment.mock.resolve(
+      mutationOp,
+      MockPayloadGenerator.generate(mutationOp)
+    );
+  })
+
+  expect(getByText('11')).toBeTruthy();
 });
