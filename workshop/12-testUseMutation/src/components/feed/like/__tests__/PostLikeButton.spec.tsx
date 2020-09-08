@@ -84,14 +84,23 @@ it('should render post like button and likes count', async () => {
     fireEvent.click(likeButton);
   });
 
+  await Environment.mock.getMostRecentOperation();
   const mutationOp = Environment.mock.getMostRecentOperation();
 
   expect(getMutationOperationVariables(mutationOp).input).toEqual({
     post: postId,
   });
 
+  const customMockMutationResolvers = {
+    Post: () => ({
+      id: postId,
+      likesCount: 11,
+      meHasLiked: true,
+    }),
+  }
+
   act(() => {
-    Environment.mock.resolve(mutationOp, MockPayloadGenerator.generate(mutationOp));
+    Environment.mock.resolve(mutationOp, MockPayloadGenerator.generate(mutationOp, customMockMutationResolvers));
   });
 
   expect(getByText('11')).toBeTruthy();
