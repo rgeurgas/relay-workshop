@@ -15,7 +15,6 @@ import { withProviders } from '../../../../../test/withProviders';
 
 import { PostLikeButtonSpecQuery } from './__generated__/PostLikeButtonSpecQuery.graphql';
 
-
 export const getRoot = ({ preloadedQuery }) => {
   const UseQueryWrapper = () => {
     const data = usePreloadedQuery<PostLikeButtonSpecQuery>(
@@ -97,7 +96,7 @@ it('should render post like button and likes count', async () => {
       likesCount: 11,
       meHasLiked: true,
     }),
-  }
+  };
 
   act(() => {
     Environment.mock.resolve(mutationOp, MockPayloadGenerator.generate(mutationOp, customMockMutationResolvers));
